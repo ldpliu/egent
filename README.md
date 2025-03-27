@@ -12,6 +12,10 @@ Egent stands for "Engineer Agent," designed to take care of all the tedious and 
 - [FAQ](#faq)
   - [Why not just script it?](#why-not-just-script-it)
   - [When can it handle more complex tasks?](#when-can-it-handle-more-complex-tasks)
+- [Key Mindset Shifts For Engineers](#key-mindset-shifts-for-engineers)
+  - [Let AI do, you help](#let-ai-do-you-help)
+  - [Start managing the "shadow knowledge"](#start-managing-the-shadow-knowledge)
+- [Roadmap](#roadmap)
 
 ## Demo
 
