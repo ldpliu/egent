@@ -48,7 +48,9 @@ The agent works with the following components:
 If you want to start a new task, make sure you are in the `Agent` mode, then:
 
 1. Type `Follow @start.md`, this will tell the agent to consume the context first.
-2. Type the task description, it could be a short sentence if there is a task template for it. For example: "Tiny refactor import-controller" or "Hive API Upgrade for train 27". It could also be very detailed if it's a new task that agent never done before.
+2. Type the task description, it could be a short sentence if there is a task template for it.
+   - For examples: `Tiny refactor import-controller` or `Hive API Upgrade for train 27`.
+   - It could also be very detailed if it's a new task that agent never done before.
 3. The agent will use `current-task.md` to record the task plan, progress, result, and it's reflection.
 
 ## FAQ
