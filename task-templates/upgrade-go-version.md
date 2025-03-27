@@ -9,7 +9,7 @@
 
 The goal is to upgrade the Go version of the specified repos to the target version.
 
-For a repo, usually we need to upgrade go version in the following files:
+For a repo, upgrade go version means we need to change the following files:
 
 - go.mod
   - After upgrade the go version here, remember to go mod tidy, and if there is vendor directory, remember to run `go mod vendor`
