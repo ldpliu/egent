@@ -21,4 +21,7 @@ The process is as follows, for each repo:
 - Run `go get github.com/openshift/hive/apis@master`.
 - If there is vendor in the project, run `go mod tidy && go mod vendor` and if there is not, only run `go mod tidy`
 - Run checks -- `make build` and `make test`, if any error occurs, report the error and ask for next step instruction to see whether should continue on.
-- After the checks are passed, create a PR targeting the upstream repo.
+- If any error occurs, notify the user with the error message, and stop the task waiting for user's next instruction.
+- If no error occurs, deliver the code changes to github.
+  - The branch name should be like `upgrade-hive-api-in-train-{{train-number}}`.
+  - The PR title should be concise, and the PR description should be detailed.
