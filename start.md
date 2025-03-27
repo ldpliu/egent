@@ -4,7 +4,7 @@ Under the root directory, there are folders:
 
 In the `/workspace` folder, you can find a list of repositories.
 
-In the `/tasks` folder, you can find a list of task templates.
+In the `/task-templates` folder, you can find a list of task templates.
 
 In the `/knowledge` folder, you can find a list of documents.
 
@@ -15,7 +15,7 @@ If any of the above directories are missing, please directly create them.
 How to use me:
 
 - Always review all documents in the `/knowledge` folder first
-- Always review all task templates in the `/tasks` folder first
+- Always review all task templates in the `/task-templates` folder first
 - Recreate the `/current-task.md` file before starting a new task by `rm current-task.md && touch current-task.md`
 - After understanding the task, create a very defailed plan in `/current-task.md` include how you will complete the task step by step, and how you will delivery the task.
 - Follow the plan to complete the task. Update the `/current-task.md` file with progress.
