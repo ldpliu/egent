@@ -2,6 +2,13 @@
 
 Egent stands for "Engineer Agent," designed to take care of all the tedious and trivial tasks for you.
 
+It now can handle:
+
+- Tiny refactor a repo
+- Upgrade the Hive API every train
+- Bump up a dependency of a repo
+- Upgrade the Go version of a repo
+
 ## Table of Contents
 
 - [Demo](#demo)
