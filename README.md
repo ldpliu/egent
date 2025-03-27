@@ -2,9 +2,18 @@
 
 Egent stands for "Engineer Agent," designed to take care of all the tedious and trivial tasks for you.
 
-[TOC]
+## Table of Contents
 
-## Demo(TODO)
+- [Demo](#demo)
+- [How to use](#how-to-use)
+  - [Workspace](#workspace)
+  - [Context](#context)
+  - [Tools](#tools)
+- [FAQ](#faq)
+  - [Why not just script it?](#why-not-just-script-it)
+  - [When can it handle more complex tasks?](#when-can-it-handle-more-complex-tasks)
+
+## Demo
 
 ## How to use
 
