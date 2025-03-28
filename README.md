@@ -129,3 +129,7 @@ Tools evolve constantly - today it's Cursor, tomorrow it might be something else
 - Knowledge management: create a system to capture team knowledge, integrate with enterprise apps, and enable two-way knowledge sharing between engineers and agents.
 - Tools: implement enterprise-level security for agent tool access.
 - Agent Observability: develop solutions to track agent activities, progress, issues, and permission requests.
+
+The form of product looks like:
+
+![Project form](roadmap.png)
