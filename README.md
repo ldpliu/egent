@@ -54,7 +54,7 @@ The agent works with the following components:
   - For examples:
     - I want the agent to create PRs, so I need to install [gh](https://cli.github.com/) in my machine.
     - I also want the agent to send notification to me when the task is done, so I install the [noti](https://github.com/variadico/noti) in my machine.
-  - Cursor also have a good [MCP](https://modelcontextprotocol.io/introduction) support, you can also add MCP Servers in the Cursor's settings.
+  - Cursor also has good [MCP](https://modelcontextprotocol.io/introduction) support, you can also add MCP Servers in the Cursor's settings.
 
 If you want to start a new task, make sure you are in the `Agent` mode, then:
 
@@ -86,7 +86,7 @@ BUT AI's task completion abilities are improving rapidly, **doubling every 7 mon
 
 Within 2-4 years, AI will be capable of executing complex tasks that take a full week to complete.
 
-While we can wait for that moment, but we can also proactively take actions to stay ahead of the curve and even contribute to this future.
+While we can wait for that moment, we can also proactively take actions to stay ahead of the curve and even contribute to this future.
 
 ## Key Mindset Shifts For Engineers
 
@@ -118,7 +118,14 @@ Tools come and go, but "shadow knowledge" is a forever asset for the team.
 
 ## Roadmap
 
+Test with Models capabilities:
+
 - Try more complex tasks, for example: simple feature development, or bug fixing.
 - Integrate with more MCP tools: Slack, [Browser Use](https://docs.browser-use.com/introduction), Kubernetes, etc.
-- Implement agent status observation and feedback mechanism.
-- Implement a service to manage task and knowledge.
+
+**Around Agent:**
+
+- Task management: build a system for different roles (PM, Dev, QA) to submit, reuse, review and track tasks, making them easily consumable by agents.
+- Knowledge management: create a system to capture team knowledge, integrate with enterprise apps, and enable two-way knowledge sharing between engineers and agents.
+- Tools: implement enterprise-level security for agent tool access.
+- Agent Observability: develop solutions to track agent activities, progress, issues, and permission requests.
