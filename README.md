@@ -120,3 +120,5 @@ Tools come and go, but "shadow knowledge" is a forever asset for the team.
 
 - Try more complex tasks, for example: simple feature development, or bug fixing.
 - Integrate with more MCP tools: Slack, [Browser Use](https://docs.browser-use.com/introduction), Kubernetes, etc.
+- Implement agent status observation and feedback mechanism.
+- Implement a service to manage task and knowledge.
