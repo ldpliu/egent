@@ -114,8 +114,6 @@ When we want Agents to work like experts, we must first incorporate this shadow 
 
 In this project, we currently use a file-based approach to integrate shadow knowledge into the Agent's context. In the future, specialized tools for managing shadow knowledge will likely emerge, and agents will develop the ability to learn this knowledge autonomously.
 
-Tools come and go, but "shadow knowledge" is a forever asset for the team.
-
 ## Roadmap
 
 Test with Models capabilities:
@@ -124,6 +122,8 @@ Test with Models capabilities:
 - Integrate with more MCP tools: Slack, [Browser Use](https://docs.browser-use.com/introduction), Kubernetes, etc.
 
 **Around Agent:**
+
+Tools evolve constantly - today it's Cursor, tomorrow it might be something else. Teams may develop their own agents or integrate multiple agents from different sources to work together. So this project **doesn't aim to build agents themselves, but rather to explore opportunities in the ecosystem surrounding them**:
 
 - Task management: build a system for different roles (PM, Dev, QA) to submit, reuse, review and track tasks, making them easily consumable by agents.
 - Knowledge management: create a system to capture team knowledge, integrate with enterprise apps, and enable two-way knowledge sharing between engineers and agents.
