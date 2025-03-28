@@ -68,9 +68,9 @@ The agent works with the following components:
 
 ![Egent Architecture](arch.png)
 
-- #### Workspace:
+#### Workspace
   - Create the `/workspace` folder, and git clone all the repositories you want your agent to work on.
-- #### Context:
+#### Context
   - Task-Templates: `/task-templates`
     - In professional settings, engineers typically receive brief task descriptions but can quickly transform them into detailed execution plans based on their **experience**.
     - Task templates aim to achieve this process: you only need to provide a brief task description, and the Agent will automatically **map it into a comprehensive execution plan**.
@@ -78,13 +78,13 @@ The agent works with the following components:
     - Add everything you want to use as context for the agent.
     - Particularly **shadow knowledge** - the implicit information experienced engineers possess. This includes repository architecture, PR submission workflows, team coding standards, and other tacit knowledge typically acquired through experience.
     - For adding **domain knowledge**, you can also leverage Cursor's [Docs feature](https://docs.cursor.com/context/@-symbols/@-docs), which allows you to seamlessly integrate external documentation and reference materials that your agent can access and utilize during tasks.
-- #### Tools:
+#### Tools
   - There are mainly **2** types of tools the agent can use: the **command line tools** and **MCPs**.
   - For examples:
     - I want the agent to create PRs, so I need to install [gh](https://cli.github.com/) in my machine.
     - I also want the agent to send notification to me when the task is done, so I install the [noti](https://github.com/variadico/noti) in my machine.
   - Cursor also has good [MCP](https://modelcontextprotocol.io/introduction) support, you can also add MCP Servers in the Cursor's settings.
-- #### Worklogs:
+#### Worklogs
   - The agent will plan, record, and summarize in a worklog file under the `/worklogs` folder.
   - It's a way for user to better observe agent activities and status.
 
