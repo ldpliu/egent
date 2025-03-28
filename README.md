@@ -27,6 +27,26 @@ It now can handle the following tedious and trivial tasks for our team:
 
 ## Demo
 
+https://github.com/user-attachments/assets/9be64685-7774-4be2-b144-1d9d4f347c73
+
+In this demo, we want to let the agent make a tiny refactor on the import-controller repository. Throughout the process, we interact with Cursor three times:
+
+1. Enter Follow @start.md run task: tiny refactor import-controller
+2. When Cursor reaches the tool usage limit(25 times currently, it will raise or support customized in the furture), we need to click to continue
+3. When `make lint` takes too long, we instruct the agent to skip this step and continue. This interaction demonstrates that **you can communicate with the agent during the process**.
+
+The agent ultimately summarized the task in the `/worklogs` directory and delivered a PR. This represents **a complete development cycle, from requirement specification to final result**.
+
+The PR: https://github.com/stolostron/managedcluster-import-controller/pull/558
+
+https://github.com/user-attachments/assets/4bfb8a4e-e3c3-451c-8bd7-1dc875340d03
+
+In this demo, the prompt is `Follow @start.md and run task: upgrade go version to 1.24 for repo cluster-proxy and import-controller`, this demo shows the agent could handle tasks requires modify multiple repos.
+
+The PRs:
+* https://github.com/stolostron/managedcluster-import-controller/pull/556
+* https://github.com/open-cluster-management-io/cluster-proxy/pull/231
+
 ## How to use
 
 First, you need to set the right cursor settings:
