@@ -1,8 +1,8 @@
 # Egent
 
-Egent stands for "Engineer Agent," designed to take care of all the tedious and trivial tasks for you.
+Egent aims to be the platform that bridges **engineer teams** and **agents**.
 
-It now can handle the following tasks for our team:
+It now can handle the following tedious and trivial tasks for our team:
 
 - Tiny refactor a repo
 - Upgrade the Hive API every train
