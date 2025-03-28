@@ -12,6 +12,7 @@ I want to continuously improve the code quality of the repository by making smal
 
 Actions:
 
+- Checkout to the `main` branch, if there are any uncommitted changes, stash them.
 - Review all the code and find a point that can be refactored
 - Modify it
 - Find unit-test related commands in the Makefile, run the unit tests, and if there are errors, make changes again, repeating until the unit tests pass without errors

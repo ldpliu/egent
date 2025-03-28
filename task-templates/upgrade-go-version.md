@@ -19,6 +19,7 @@ For a repo, upgrade go version means we need to change the following files:
 
 For each repo, you need to:
 
+- Checkout to the `main` branch, if there are any uncommitted changes, stash them.
 - Upgrade the go version in the files mentioned above
 - Run `make build` to check whether there are any errors
 - If any error occurs, notify the user with the error message, and stop the task waiting for user's next instruction.
