@@ -16,6 +16,7 @@ It now can handle the following tedious and trivial tasks for our team:
   - [Workspace](#workspace)
   - [Context](#context)
   - [Tools](#tools)
+  - [Worklogs](#worklogs)
 - [FAQ](#faq)
   - [Why not just script it?](#why-not-just-script-it)
   - [When can it handle more complex tasks?](#when-can-it-handle-more-complex-tasks)
@@ -34,6 +35,13 @@ First, you need to set the right cursor settings:
 - Enable `auto-run` mode.
 - Review changes set to `Auto-run`.
 - Model Preference: Thinking (claude-3.7-sonnet)
+
+If you want to start a new task, make sure you are in the `Agent` mode, then:
+
+1. Type `Follow @start.md`, this will tell the agent to consume the context first.
+2. Type the task description, it could be a short sentence if there is a task template for it.
+   - For examples: `Tiny refactor import-controller` or `Hive API Upgrade for train 27`.
+   - It could also be very detailed if it's a new task that agent never done before.
 
 The agent works with the following components:
 
@@ -55,14 +63,9 @@ The agent works with the following components:
     - I want the agent to create PRs, so I need to install [gh](https://cli.github.com/) in my machine.
     - I also want the agent to send notification to me when the task is done, so I install the [noti](https://github.com/variadico/noti) in my machine.
   - Cursor also has good [MCP](https://modelcontextprotocol.io/introduction) support, you can also add MCP Servers in the Cursor's settings.
-
-If you want to start a new task, make sure you are in the `Agent` mode, then:
-
-1. Type `Follow @start.md`, this will tell the agent to consume the context first.
-2. Type the task description, it could be a short sentence if there is a task template for it.
-   - For examples: `Tiny refactor import-controller` or `Hive API Upgrade for train 27`.
-   - It could also be very detailed if it's a new task that agent never done before.
-3. The agent will use `current-task.md` to record the task plan, progress, result, and it's reflection.
+- #### Worklogs:
+  - The agent will plan, record, and summarize in a worklog file under the `/worklogs` folder.
+  - It's a way for user to better observe agent activities and status.
 
 ## FAQ
 
