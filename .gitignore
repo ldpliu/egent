@@ -8,7 +8,6 @@ __pycache__/
 
 # Build outputs
 dist/
-build/
 *.egg-info/
 *.egg
 *.whl
