@@ -3,7 +3,7 @@ name: Server Foundation Repos
 description: This part of content includes everything about github repos of server foundation squad.
 ---
 
-# Repo List
+# Server Foundation Repos
 
 When we mentioned the "server-foundation-repos", it means the repos in the table below.
 
@@ -32,7 +32,11 @@ The repositories have nicknames that can be used in task descriptions to refer t
 
 # Upstreams
 
+The repos are forks of repositories from organizations like `stolostron`, `open-cluster-management-io`, and `openshift`.
+
 The `ocm`, `cluster-proxy`, `managed-serviceaccount` repos' upstream is `open-cluster-management-io`.
+
+The `release` repo upstream is `openshift/release`.
 
 Other repos' upstream is `stolostron`.
 
