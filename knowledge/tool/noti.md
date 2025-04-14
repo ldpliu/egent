@@ -1,3 +1,8 @@
+---
+name: Noti
+description: This part of content includes everything about how to use `noti` to notify user.
+---
+
 You can notify user by command line tool, like `noti`, for example:
 
 ```bash
