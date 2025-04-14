@@ -1,11 +1,11 @@
 ---
-name: Server Foundation Repos
+name: Repos
 description: This part of content includes everything about github repos of server foundation squad.
 ---
 
-# Server Foundation Repos
+# What is "Server Foundation" Repos
 
-When we mentioned the "server-foundation-repos", it means the repos in the table below.
+When we mentioned the "server-foundation repos", it means the repos in the table below.
 
 | Repository                       |
 | -------------------------------- |
