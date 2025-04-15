@@ -36,12 +36,29 @@ When the user sends you a task description:
     - **If a task template was used (Steps 1-3 completed):** Base the step-by-step plan primarily on the **content of the task template**, substituting the provided parameter values into the template placeholders (like `{{parameter_name}}`). Also incorporate steps related to understanding or using the **included knowledge dependencies** returned with the template.
     - **If NO task template was used:** Base the step-by-step plan solely on the **user's original task description**.
     - Start executing the task.
+    - **IMPORTANT:** Include "Create worklog" as an explicit step in your execution plan.
 
-5.  **Summarize:**
-    - Once the task is completed:
-      - Create a detailed log file in the `/worklogs` folder. The filename format is `YYYYMMDD-HHMM-<task-short-summary>.md`.
-      - Append a summary to the end of the worklog file, including:
-        - What you did (brief overview of actions).
-        - What problems you encountered that you think were difficult, and how you solved them.
+5.  **Create Worklog (REQUIRED):**
+
+    - This step is MANDATORY for ALL tasks and must be completed BEFORE reporting task completion.
+    - Create a detailed log file in the `/worklogs` folder. The filename format is `YYYYMMDD-HHMM-<task-short-summary>.md`.
+    - The worklog should include:
+      - Date and time
+      - Task summary
+      - Detailed plan
+      - Step-by-step progress updates with timestamps
+      - Implementation details including:
+        - Problems identified
+        - Solutions implemented
+        - Code changes made
+      - Final summary including:
+        - What you did (brief overview of actions)
+        - Problems encountered and how you solved them
+        - New knowledge worth documenting
+    - After creating the worklog, include the path to the worklog file in your final task completion message.
+
+6.  **Summarize:**
+    - After creating the worklog, provide a concise summary of the completed task to the user.
+    - Reference the created worklog file in your summary.
 
 ---
