@@ -1,6 +1,8 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { createKnowledgeResource, knowledgeResourceMetadata, handleKnowledgeResource } from "./resources/knowledge.js";
+// Import the new task template resource handlers
+import { createTaskTemplateResource, taskTemplateResourceMetadata, handleTaskTemplateResource } from "./resources/task-templates.js";
 
 // Create an MCP server
 const server = new McpServer({
@@ -14,6 +16,14 @@ server.resource(
   createKnowledgeResource(),
   knowledgeResourceMetadata,
   handleKnowledgeResource
+);
+
+// Register task template resource handler
+server.resource(
+  "task-template",
+  createTaskTemplateResource(),
+  taskTemplateResourceMetadata,
+  handleTaskTemplateResource
 );
 
 // Start receiving messages on stdin and sending messages on stdout

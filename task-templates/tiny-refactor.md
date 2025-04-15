@@ -1,14 +1,17 @@
-# Task: Tiny Refactor
+---
+name: Tiny Refactor
+description: Refactor the code of the specified repo.
+parameters:
+  repo_name:
+    description: Name of the repo to refactor
+dependencies:
+  - knowledge/code/repos.md
+  - knowledge/tools/git.md
+  - knowledge/tools/github.md
+  - knowledge/tools/noti.md
+---
 
-## Parameters
-
-- repo name
-
-## Description
-
-Motivation:
-
-I want to continuously improve the code quality of the repository by making small changes each time, following the concept of "tiny refactor".
+I want to continuously improve the code quality of the repository {{repo_name}} by making small changes each time, following the concept of "tiny refactor".
 
 Actions:
 

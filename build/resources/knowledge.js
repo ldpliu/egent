@@ -1,84 +1,7 @@
 import { ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
-import fs from "node:fs/promises";
 import path from "node:path";
-import yaml from 'js-yaml';
-
-// Parse frontmatter and content from Markdown files
-async function parseMarkdownFile(filePath) {
-  const content = await fs.readFile(filePath, 'utf-8');
-
-  // Look for frontmatter
-  const frontmatterMatch = content.match(/^---\s*\n([\s\S]*?)\n---\s*\n/);
-
-  let metadata = {};
-  let markdownContent = content;
-
-  if (frontmatterMatch) {
-    try {
-      metadata = yaml.load(frontmatterMatch[1]) || {};
-      // Remove frontmatter, keep only Markdown content
-      markdownContent = content.substring(frontmatterMatch[0].length);
-    } catch (error) {
-      console.error(`Error parsing frontmatter in ${filePath}:`, error);
-    }
-  }
-
-  return { metadata, content: markdownContent };
-}
-
-// Split Markdown content into sections based on headings
-function splitMarkdownIntoSections(content, baseUri) {
-  // Use regex to find all headings
-  const headerRegex = /^(#{1,6})\s+(.+)$/gm;
-
-  const sections = [];
-  let currentMatch;
-  let matches = [];
-
-  // Collect all matches
-  while ((currentMatch = headerRegex.exec(content)) !== null) {
-    matches.push({
-      level: currentMatch[1].length,
-      title: currentMatch[2],
-      index: currentMatch.index
-    });
-  }
-
-  // If no headings found, return the entire content as one section
-  if (matches.length === 0) {
-    return [{
-      uri: baseUri,
-      text: content,
-      contentType: "text/markdown"
-    }];
-  }
-
-  // Process matches and create sections
-  for (let i = 0; i < matches.length; i++) {
-    const match = matches[i];
-    const nextMatch = i < matches.length - 1 ? matches[i + 1] : null;
-
-    // Determine the end position of the section content
-    const endIndex = nextMatch ? nextMatch.index : content.length;
-
-    // Extract section content (including the heading)
-    const sectionContent = content.substring(match.index, endIndex);
-
-    // Generate section ID (for URI fragment)
-    const sectionId = match.title
-      .toLowerCase()
-      .replace(/[^\w\s-]/g, '') // Remove special characters
-      .replace(/\s+/g, '-');    // Replace spaces with hyphens
-
-    sections.push({
-      uri: `${baseUri}#${sectionId}`,
-      text: sectionContent,
-      contentType: "text/markdown"
-    });
-  }
-
-  return sections;
-}
+import fs from "node:fs/promises";
+import { parseMarkdownFile, splitMarkdownIntoSections } from "../utils/markdown.js";
 
 // Create and export the knowledge resource handler
 export function createKnowledgeResource() {
@@ -102,6 +25,7 @@ export function createKnowledgeResource() {
             for (const file of files) {
               if (file.isFile() && file.name.endsWith('.md')) {
                 const filePath = path.join(categoryPath, file.name);
+                // Use the imported parseMarkdownFile
                 const { metadata } = await parseMarkdownFile(filePath);
 
                 // Use name from metadata, or fallback to filename (without extension)
@@ -171,10 +95,10 @@ export async function handleKnowledgeResource(uri, { category, topic }) {
     // Build file path
     const filePath = path.join(process.cwd(), "knowledge", category, `${topic}.md`);
 
-    // Parse Markdown file
+    // Parse Markdown file using the imported function
     const { metadata, content } = await parseMarkdownFile(filePath);
 
-    // Split Markdown into sections based on headings
+    // Split Markdown into sections based on headings using the imported function
     const sections = splitMarkdownIntoSections(content, uri.href);
 
     // Add a metadata entry providing overall document information
