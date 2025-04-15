@@ -16,3 +16,5 @@ gh pr create --repo stolostron/<repo-name> --base <base-branch> --head <github u
 ```
 
 Keep the PR title concise. In the PR description, provide detailed reasoning for the changes using Markdown format and make sure to use the `$''` syntax (ANSI-C quoting), as it correctly interprets escape sequences.
+
+PR title and description must be in English.

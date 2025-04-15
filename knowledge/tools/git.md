@@ -15,6 +15,8 @@ All commit need to be signed, when you want to run git commit, you need to add t
 git commit -s -m "your commit message"
 ```
 
+Commit message must be in English.
+
 Commit messages should be concise and limited to no more than two sentences.
 
 # Start a new task
