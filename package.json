@@ -1,7 +1,11 @@
 {
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.9.0",
+    "@types/fs-extra": "^11.0.4",
+    "fs-extra": "^11.3.0",
     "js-yaml": "^4.1.0",
+    "simple-git": "^3.27.0",
+    "yargs": "^17.7.2",
     "zod": "^3.24.2"
   },
   "devDependencies": {

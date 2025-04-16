@@ -4,12 +4,15 @@ import path from "node:path";
 import { parseMarkdownFile, splitMarkdownIntoSections } from "../utils/markdown.js";
 
 // Create a task template resource handler
-export function createTaskTemplateResource() {
+// Accept taskTemplatesBasePath as an argument
+export function createTaskTemplateResource(taskTemplatesBasePath) {
   // Use a wildcard template to capture any .md file in task-templates
   return new ResourceTemplate("task-template://{templateId}", {
     list: async () => {
       try {
-        const templateDir = path.join(process.cwd(), "task-templates");
+        // Use the provided base path
+        // const templateDir = path.join(process.cwd(), "task-templates");
+        const templateDir = taskTemplatesBasePath;
         const files = await fs.readdir(templateDir, { withFileTypes: true });
 
         const resources = [];
@@ -43,7 +46,9 @@ export function createTaskTemplateResource() {
     complete: {
       templateId: async () => {
         try {
-          const templateDir = path.join(process.cwd(), "task-templates");
+          // Use the provided base path
+          // const templateDir = path.join(process.cwd(), "task-templates");
+          const templateDir = taskTemplatesBasePath;
           const files = await fs.readdir(templateDir, { withFileTypes: true });
 
           return files
@@ -77,9 +82,12 @@ function parseDependencyString(depString) {
 }
 
 // Function to get content of a knowledge dependency
-async function getKnowledgeDependencyContent(category, topic) {
+// Accept knowledgeBasePath as an argument
+async function getKnowledgeDependencyContent(knowledgeBasePath, category, topic) {
   try {
-    const filePath = path.join(process.cwd(), "knowledge", category, `${topic}.md`);
+    // Use the provided knowledge base path
+    // const filePath = path.join(process.cwd(), "knowledge", category, `${topic}.md`);
+    const filePath = path.join(knowledgeBasePath, category, `${topic}.md`);
     const { metadata, content } = await parseMarkdownFile(filePath);
     const baseUri = `knowledge://${category}/${topic}`; // Base URI for sections
     const sections = splitMarkdownIntoSections(content, baseUri);
@@ -122,94 +130,100 @@ async function getKnowledgeDependencyContent(category, topic) {
 
 
 // Handle task template resource requests, including dependencies
-export async function handleTaskTemplateResource(uri, { templateId }) {
-    // Note: This implementation doesn't handle URI parameters yet.
-    // Add parameter handling logic here if needed, similar to previous examples.
-  try {
-    // Build file path for the task template
-    const templateFilePath = path.join(process.cwd(), "task-templates", `${templateId}.md`);
-
-    // Parse the main task template Markdown file
-    let metadata, content;
+// This is now a factory function accepting base paths
+export function handleTaskTemplateResource(taskTemplatesBasePath, knowledgeBasePath) {
+  // Return the actual handler
+  return async (uri, { templateId }) => {
+      // Note: This implementation doesn't handle URI parameters yet.
+      // Add parameter handling logic here if needed, similar to previous examples.
     try {
-        ({ metadata, content } = await parseMarkdownFile(templateFilePath));
-    } catch (parseError) {
-        // Handle file not found specifically
-        console.error(`Error reading task template: ${templateId}`, parseError);
-        return {
-          contents: [{
-            uri: uri.href,
-            text: `Could not load task template: ${templateId}. Error: ${parseError.message}`,
-            contentType: "text/plain"
-          }]
-        };
-    }
+      // Build file path for the task template using the provided base path
+      // const templateFilePath = path.join(process.cwd(), "task-templates", `${templateId}.md`);
+      const templateFilePath = path.join(taskTemplatesBasePath, `${templateId}.md`);
 
-    // Split the main task content into sections
-    const taskSections = splitMarkdownIntoSections(content, uri.href);
-
-    // Process dependencies
-    const dependencies = metadata.dependencies || [];
-    let dependencyContents = [];
-
-    for (const depString of dependencies) {
-      const parsedDep = parseDependencyString(depString);
-      if (parsedDep && parsedDep.type === 'knowledge') {
-        const depContentSections = await getKnowledgeDependencyContent(parsedDep.category, parsedDep.topic);
-        dependencyContents = dependencyContents.concat(depContentSections);
-      } else {
-        console.warn(`Skipping unsupported dependency format: ${depString}`);
-        // Optionally add a marker for skipped dependencies
-         dependencyContents.push({
-            uri: `error://dependency/skipped/${depString.replace(/[^a-zA-Z0-9]/g, '-')}`,
-            text: `Skipped dependency (unsupported format): ${depString}`,
-            contentType: "text/plain",
-            metadata: { dependencySkipped: true }
-         });
+      // Parse the main task template Markdown file
+      let metadata, content;
+      try {
+          ({ metadata, content } = await parseMarkdownFile(templateFilePath));
+      } catch (parseError) {
+          // Handle file not found specifically
+          console.error(`Error reading task template: ${templateId}`, parseError);
+          return {
+            contents: [{
+              uri: uri.href,
+              text: `Could not load task template: ${templateId}. Error: ${parseError.message}`,
+              contentType: "text/plain"
+            }]
+          };
       }
-    }
 
-    // Create metadata section for the main task template
-    const metaSection = {
-      uri: `${uri.href}#meta`,
-      text: JSON.stringify({
+      // Split the main task content into sections
+      const taskSections = splitMarkdownIntoSections(content, uri.href);
+
+      // Process dependencies
+      const dependencies = metadata.dependencies || [];
+      let dependencyContents = [];
+
+      for (const depString of dependencies) {
+        const parsedDep = parseDependencyString(depString);
+        if (parsedDep && parsedDep.type === 'knowledge') {
+          // Call the helper with the captured knowledgeBasePath
+          const depContentSections = await getKnowledgeDependencyContent(knowledgeBasePath, parsedDep.category, parsedDep.topic);
+          dependencyContents = dependencyContents.concat(depContentSections);
+        } else {
+          console.warn(`Skipping unsupported dependency format: ${depString}`);
+          // Optionally add a marker for skipped dependencies
+           dependencyContents.push({
+              uri: `error://dependency/skipped/${depString.replace(/[^a-zA-Z0-9]/g, '-')}`,
+              text: `Skipped dependency (unsupported format): ${depString}`,
+              contentType: "text/plain",
+              metadata: { dependencySkipped: true }
+           });
+        }
+      }
+
+      // Create metadata section for the main task template
+      const metaSection = {
+        uri: `${uri.href}#meta`,
+        text: JSON.stringify({
+          name: metadata.name || templateId,
+          description: metadata.description || `Task template: ${templateId}`,
+          parameters: metadata.parameters || [], // Include parameter definitions
+          dependencies: metadata.dependencies || [], // List raw dependencies
+          // Add other relevant metadata from the template file
+          ...metadata
+        }, null, 2),
+        contentType: "application/json"
+      };
+
+      // Combine meta, task sections, and dependency sections
+      const allContents = [metaSection, ...taskSections, ...dependencyContents];
+
+      return {
         name: metadata.name || templateId,
         description: metadata.description || `Task template: ${templateId}`,
-        parameters: metadata.parameters || [], // Include parameter definitions
-        dependencies: metadata.dependencies || [], // List raw dependencies
-        // Add other relevant metadata from the template file
-        ...metadata
-      }, null, 2),
-      contentType: "application/json"
-    };
-
-    // Combine meta, task sections, and dependency sections
-    const allContents = [metaSection, ...taskSections, ...dependencyContents];
-
-    return {
-      name: metadata.name || templateId,
-      description: metadata.description || `Task template: ${templateId}`,
-      contentType: "text/markdown", // Base type, contents list has mixed types
-      contents: allContents
-    };
-  } catch (error) {
-    console.error(`Error reading task template resource:`, error);
-    // Check if it's a file not found error
-     if (error.code === 'ENOENT') {
-         return {
-           error: {
-             code: "ResourceNotFound",
-             message: `Task template not found: ${templateId}`
+        contentType: "text/markdown", // Base type, contents list has mixed types
+        contents: allContents
+      };
+    } catch (error) {
+      console.error(`Error reading task template resource:`, error);
+      // Check if it's a file not found error
+       if (error.code === 'ENOENT') {
+           return {
+             error: {
+               code: "ResourceNotFound",
+               message: `Task template not found: ${templateId}`
+             }
            }
-         }
-     }
-    // Return a generic error response
-    return {
-      contents: [{
-        uri: uri.href,
-        text: `Could not load task template: ${templateId}. Error: ${error.message}`,
-        contentType: "text/plain"
-      }]
-    };
-  }
+       }
+      // Return a generic error response
+      return {
+        contents: [{
+          uri: uri.href,
+          text: `Could not load task template: ${templateId}. Error: ${error.message}`,
+          contentType: "text/plain"
+        }]
+      };
+    }
+  };
 }

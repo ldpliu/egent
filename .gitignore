@@ -39,7 +39,5 @@ htmlcov/
 *.temp
 .cache/
 
-# Workspace files
 workspace/
-worklogs/
-current-task.md
+context/

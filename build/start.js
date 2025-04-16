@@ -5,7 +5,7 @@ import { z } from "zod";
 // --- Resource Implementation ---
 
 const START_INSTRUCTIONS_URI = "egent://instructions/start";
-const START_MD_PATH = path.join(process.cwd(), "start.md"); // Path to your start.md
+const START_MD_PATH = path.join(process.cwd(), "start.md"); // Revert to using CWD for start.md
 
 // Metadata for the resource (optional but good practice)
 export const startInstructionsResourceMetadata = {
@@ -14,10 +14,11 @@ export const startInstructionsResourceMetadata = {
   contentType: "text/markdown",
 };
 
-// Callback to handle read requests for the resource
+// Callback factory to handle read requests for the resource
 async function handleReadStartInstructions(uri, extra) {
+  const startMdPath = START_MD_PATH; // Use the path defined above
   try {
-    const content = await fs.readFile(START_MD_PATH, "utf-8");
+    const content = await fs.readFile(startMdPath, "utf-8");
     return {
       // Include metadata defined above
       ...startInstructionsResourceMetadata,
@@ -31,13 +32,13 @@ async function handleReadStartInstructions(uri, extra) {
       ],
     };
   } catch (error) {
-    console.error(`Error reading start instructions (${START_MD_PATH}):`, error);
+    console.error(`Error reading start instructions (${startMdPath}):`, error);
     // Return an error structure compliant with MCP expectations
      if (error.code === 'ENOENT') {
          return {
            error: {
              code: "ResourceNotFound",
-             message: `Start instructions file not found at ${START_MD_PATH}`
+             message: `Start instructions file not found at ${startMdPath}`
            }
          }
      }
@@ -62,7 +63,7 @@ export function registerStartInstructionsResource(server) {
     "start_instructions", // Internal name for registration
     START_INSTRUCTIONS_URI, // The fixed URI for this resource
     startInstructionsResourceMetadata, // Associated metadata
-    handleReadStartInstructions // The callback function
+    handleReadStartInstructions // Pass the handler directly
   );
 }
 
@@ -74,37 +75,38 @@ const startTaskPromptArgs = {
     task_description: z.string().describe("The user's description of the task to be performed.")
 };
 
-// Callback to handle the prompt request
+// Callback factory to handle the prompt request
 async function handleStartTaskPrompt(args, extra) {
-    const { task_description } = args;
-    try {
-        // Read the start instructions content (same as the resource)
-        const instructionsContent = await fs.readFile(START_MD_PATH, 'utf-8');
+  const { task_description } = args;
+  const startMdPath = START_MD_PATH; // Use the path defined above
+  try {
+      // Read the start instructions content (same as the resource)
+      const instructionsContent = await fs.readFile(startMdPath, 'utf-8');
 
-        // Here you can decide how to combine the instructions and the task description.
-        // Option 1: Just return the instructions, ignoring the task description for now.
-        // Option 2: Prepend a confirmation using the task description.
-        // Option 3: (More advanced) Parse instructions and try to integrate the task.
+      // Here you can decide how to combine the instructions and the task description.
+      // Option 1: Just return the instructions, ignoring the task description for now.
+      // Option 2: Prepend a confirmation using the task description.
+      // Option 3: (More advanced) Parse instructions and try to integrate the task.
 
-        // Let's go with Option 2 for demonstration:
-        const combinedPrompt = `Okay, I understand you want to: "${task_description}".\n\nHere are my operating instructions:\n---\n${instructionsContent}\n---\nI will now proceed according to these instructions, starting with step 1 (Match Task to Template).`;
+      // Let's go with Option 2 for demonstration:
+      const combinedPrompt = `Okay, I understand you want to: "${task_description}".\n\nHere are my operating instructions:\n---\n${instructionsContent}\n---\nI will now proceed according to these instructions, starting with step 1 (Match Task to Template).`;
 
-        return {
-            // Metadata for the prompt result
-            name: "Start Task Execution",
-            description: `Initiating task based on provided description and start instructions.`,
-            // The actual content/prompt to be potentially used by the agent
-            prompt: combinedPrompt
-        };
+      return {
+          // Metadata for the prompt result
+          name: "Start Task Execution",
+          description: `Initiating task based on provided description and start instructions.`,
+          // The actual content/prompt to be potentially used by the agent
+          prompt: combinedPrompt
+      };
 
-    } catch (error) {
-         console.error(`Error processing start_task prompt (${START_MD_PATH}):`, error);
-         return {
-             name: "Error Starting Task",
-             description: "Failed to load instructions for starting the task.",
-             prompt: `Error: Could not load start instructions. ${error.message}`
-         }
-    }
+  } catch (error) {
+       console.error(`Error processing start_task prompt (${startMdPath}):`, error);
+       return {
+           name: "Error Starting Task",
+           description: "Failed to load instructions for starting the task.",
+           prompt: `Error: Could not load start instructions. ${error.message}`
+       }
+  }
 }
 
 // Function to register the prompt with the server
@@ -113,6 +115,6 @@ export function registerStartTaskPrompt(server) {
         "start_task", // The name the client will use to call the prompt
         "Initiates a task using the standard start instructions and a user-provided description.", // Description
         startTaskPromptArgs, // Parameter schema
-        handleStartTaskPrompt // The callback function
+        handleStartTaskPrompt // Pass the handler directly
     );
 }
