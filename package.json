@@ -8,5 +8,7 @@
     "@types/node": "^22.14.1",
     "typescript": "^5.8.3"
   },
-  "type": "module"
+  "type": "module",
+  "name": "egent",
+  "version": "0.0.1"
 }
