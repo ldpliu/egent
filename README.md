@@ -113,6 +113,12 @@ For developing Egent itself:
 }
 ```
 
+You can also use `inspector` to inspect the MCP resources:
+
+```bash
+npx @modelcontextprotocol/inspector node build/index.js --context-repo git@github.com:stolostron/server-foundation-dev-context.git
+```
+
 ## Roadmap
 
 - Add a hello workd context repo.
