@@ -5,8 +5,10 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { createKnowledgeResource, knowledgeResourceMetadata, handleKnowledgeResource } from "./resources/knowledge.js";
 // Import the new task template resource handlers
 import { createTaskTemplateResource, taskTemplateResourceMetadata, handleTaskTemplateResource } from "./resources/task-templates.js";
+// Import the task catalog resource
+import { registerTaskCatalogResource } from "./resources/task-catalog.js";
 // Import the new registration functions
-import { registerStartInstructionsResource, registerStartTaskPrompt } from "./start.js"; // Adjust path if needed
+import { registerStartInstructionsResource, registerStartTaskPrompt, registerListTasksPrompt } from "./start.js"; // Adjust path if needed
 import { syncContextRepo } from "./utils/gitContextSync.js"; // Import the sync function
 import path from 'path'; // Import path module
 import yargs from 'yargs';
@@ -116,11 +118,17 @@ async function main() {
     )
   );
 
+  // Register the task catalog resource
+  registerTaskCatalogResource(server, path.join(contextBasePath, 'task-templates'));
+
   // Register the start instructions resource
   registerStartInstructionsResource(server);
 
   // Register the start task prompt
   registerStartTaskPrompt(server);
+
+  // Register the list tasks prompt
+  registerListTasksPrompt(server);
 
   // Start receiving messages on stdin and sending messages on stdout
   const transport = new StdioServerTransport();

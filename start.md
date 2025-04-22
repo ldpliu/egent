@@ -8,6 +8,18 @@ If any of the above directories are missing, please create them.
 
 ---
 
+## Special Commands
+
+When a user requests task listing with a command like `egent:list tasks` or `egent:tasks`, I should:
+
+1. Read the task catalog resource using `read egent://catalog/tasks`
+2. Format and display all available tasks with their descriptions and examples
+3. Present the information in a clear, organized way (e.g., as a table or list)
+
+---
+
+## Create a task
+
 When the user sends you a task description:
 
 1.  **Match Task to Template:**
