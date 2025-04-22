@@ -18,28 +18,24 @@ const argv = yargs(hideBin(process.argv))
   .option('context-repo', {
     alias: 'c',
     type: 'string',
-    description: 'URL of the Git repository containing context resources'
+    description: 'URL of the Git repository containing context resources',
+    default: process.env.EGENT_CONTEXT_REPO
   })
   .option('context-repo-ref', {
     alias: 'r',
     type: 'string',
-    description: 'Branch, tag, or commit hash in the context repository'
+    description: 'Branch, tag, or commit hash in the context repository',
+    default: process.env.EGENT_CONTEXT_REF
   })
   .option('context-path', {
     alias: 'p',
     type: 'string',
-    description: 'Path to a local directory containing context resources'
+    description: 'Path to a local directory containing context resources',
+    default: process.env.EGENT_CONTEXT_PATH
   })
   .help()
   .alias('help', 'h')
   .argv;
-
-// Remove or comment out the stderr logging for configuration
-// console.error('Egent Configuration:', {
-//   repoUrl: argv.contextRepo,
-//   repoRef: argv.contextRepoRef,
-//   localPath: argv.contextPath
-// });
 
 // Determine the base path for context resources
 let contextBasePath;
