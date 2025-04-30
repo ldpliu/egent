@@ -2,18 +2,18 @@
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { createKnowledgeResource, knowledgeResourceMetadata, handleKnowledgeResource } from "./resources/knowledge.js";
-// Import the new task template resource handlers
-import { createTaskTemplateResource, taskTemplateResourceMetadata, handleTaskTemplateResource } from "./resources/task-templates.js";
-// Import the task catalog resource
-import { registerTaskCatalogResource } from "./resources/task-catalog.js";
-// Import the new registration functions
-import { registerStartInstructionsResource, registerStartTaskPrompt, registerListTasksPrompt } from "./start.js"; // Adjust path if needed
+// Import the sync function
 import { syncContextRepo } from "./utils/gitContextSync.js"; // Import the sync function
 import path from 'path'; // Import path module
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import fs from 'fs'; // Import fs for path checking
+import { loadAllKnowledge, loadAllTaskTemplates, linkDependencies } from './utils/contextLoader.js';
+import createSearchTool from './tools/search.js';
+import createCatalogTool from './tools/task-templates-catalog.js';
+import createExecuteTool from './tools/execute-task.js';
+import createStartTool from './tools/start.js';
+import { z } from "zod";
 
 // Parse command line arguments
 const argv = yargs(hideBin(process.argv))
@@ -39,12 +39,12 @@ const argv = yargs(hideBin(process.argv))
   .alias('help', 'h')
   .argv;
 
-// Determine the base path for context resources
 let contextBasePath;
+let knowledgeMap;
+let taskTemplateMap;
 
 async function initializeContext() {
   if (argv.contextRepo) {
-    // Priority 1: Use Git Repo
     try {
       contextBasePath = await syncContextRepo(argv.contextRepo, argv.contextRepoRef);
     } catch (error) {
@@ -52,10 +52,8 @@ async function initializeContext() {
       process.exit(1);
     }
   } else if (argv.contextPath) {
-    // Priority 2: Use local path specified by --context-path
     const localPath = path.resolve(argv.contextPath);
     try {
-      // Check if path exists and is a directory
       const stats = fs.statSync(localPath);
       if (!stats.isDirectory()) {
         console.error(`Fatal: Provided context path is not a directory: ${localPath}`);
@@ -71,9 +69,7 @@ async function initializeContext() {
       process.exit(1);
     }
   } else {
-    // Priority 3: Default to CWD
     contextBasePath = process.cwd();
-    // Optional: Add checks here to warn if ./knowledge or ./task-templates don't exist in CWD
     try {
         fs.statSync(path.join(contextBasePath, 'knowledge'));
         fs.statSync(path.join(contextBasePath, 'task-templates'));
@@ -83,54 +79,48 @@ async function initializeContext() {
         }
     }
   }
+  // Load all knowledge and task-templates into memory
+  knowledgeMap = await loadAllKnowledge(path.join(contextBasePath, 'knowledge'));
+  taskTemplateMap = await loadAllTaskTemplates(path.join(contextBasePath, 'task-templates'));
+  linkDependencies(knowledgeMap, taskTemplateMap);
 }
 
 async function main() {
   await initializeContext();
 
-  // Create an MCP server
   const server = new McpServer({
     name: "Egent",
-    version: "0.0.1"
+    version: "0.1.0"
   });
 
-  // --- Resource Registration ---
-  // We now need to pass the contextBasePath to the resource handlers
-  // Note: The resource handler functions need to be updated to accept this path
-
-  // Register knowledge base resource handler
-  server.resource(
-    "knowledge",
-    createKnowledgeResource(path.join(contextBasePath, 'knowledge')), // Pass path
-    knowledgeResourceMetadata,
-    handleKnowledgeResource(path.join(contextBasePath, 'knowledge'))  // Pass path
+  // Register the MCP Tool: egent_search (simple name, no slash)
+  server.tool(
+    "egent_search",
+    { query: z.string() },
+    createSearchTool(taskTemplateMap)
   );
 
-  // Register task template resource handler
-  server.resource(
-    "task-template",
-    createTaskTemplateResource(path.join(contextBasePath, 'task-templates')), // Pass task-templates path
-    taskTemplateResourceMetadata,
-    // Pass BOTH task-templates path AND knowledge path to the factory
-    handleTaskTemplateResource(
-      path.join(contextBasePath, 'task-templates'), // taskTemplatesBasePath
-      path.join(contextBasePath, 'knowledge')       // knowledgeBasePath
-    )
+  // Register the MCP Tool: egent_catalogs
+  server.tool(
+    "egent_catalogs",
+    {},  // No parameters needed
+    createCatalogTool(taskTemplateMap)
   );
 
-  // Register the task catalog resource
-  registerTaskCatalogResource(server, path.join(contextBasePath, 'task-templates'));
+  // Register the MCP Tool: egent_execute
+  server.tool(
+    "egent_execute",
+    { id: z.string() },
+    createExecuteTool(taskTemplateMap)
+  );
 
-  // Register the start instructions resource
-  registerStartInstructionsResource(server);
+  // Register the MCP Tool: egent_start
+  server.tool(
+    "egent_start",
+    { user_task: z.string() },
+    createStartTool()
+  );
 
-  // Register the start task prompt
-  registerStartTaskPrompt(server);
-
-  // Register the list tasks prompt
-  registerListTasksPrompt(server);
-
-  // Start receiving messages on stdin and sending messages on stdout
   const transport = new StdioServerTransport();
   await server.connect(transport);
 }
