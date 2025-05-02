@@ -1,6 +1,8 @@
 # Egent
 
-Egent aims to be the platform that bridges **engineer teams** and **agents**.
+Egent is an MCP server that bridges **engineer teams** and **agents**.
+
+<img src="./docs/logo.png" width="300" alt="Egent Logo">
 
 ## Table of Contents
 
@@ -12,54 +14,17 @@ Egent aims to be the platform that bridges **engineer teams** and **agents**.
 
 ## Design
 
-```mermaid
-flowchart LR
-    A[github repo] --- B[context-repo]
-    E[local files] --- F[context-path]
+<img src="./docs/design.png" width="800" alt="Design diagram">
 
-    B --> D[Egent]
-    F --> D
-    G -.-> D
+Egent connects your context-repo to an MCP server, and for each of your team members, whether they use an AI IDE like Cursor, open-source tools with local models such as Cline+Ollama, or code-agents running in remote environments, they can quickly access the contextual information needed to execute tasks by configuring the Egent MCP Server.
 
-    D --> J[Roo Code]
-    D --> K[Cline]
-    D -.-> L[Cursor]
+Everyone in your team can continuously enrich and iterate the team's knowledge base by editing the context-repo (typically in the form of a GitHub repository), thereby enabling AI to automatically complete various tasks.
 
-    G[context-server]
-    L[Cursor]
-
-    classDef default stroke:#000,fill:#fff,rx:0,ry:0
-    classDef dashed stroke-dasharray:5 5,stroke:#000,fill:#fff,rx:0,ry:0
-    classDef egent stroke:#000,fill:#fff
-
-    class G,L dashed
-    class D egent
-```
-
-Egent supports two types of context:
-
-- **`context-repo`**: A git repository containing context files. Ideal for team collaboration.
-- **`context-path`**: A local directory containing context files. Perfect for personal development or testing.
-
-Context contains two types of content:
-
-- **`knowledge`**: Knowledge base for the agent to answer questions.
-- **`task-templates`**: Task templates for the agent to complete tasks.
-
-A task template can reference knowledge as a dependency. When an agent reads a task template, it will also load the referenced knowledge.
+For details on the structure and organization of a context repository, please refer to [docs/context.md](docs/context.md).
 
 ## How to Use
 
-Egent converts `knowledge` and `task-templates` into MCP resources, making them available to compatible code agents.
-
-### Supported Agents
-
-The verified code agents that work with Egent:
-
-- **Roo Code** (Claude 3.7 Sonnet)
-- **Cline** (Claude 3.7 Sonnet)
-
-### Configuration Examples
+### Setup
 
 **Basic Configuration:**
 
@@ -75,8 +40,6 @@ To use Egent with a remote context repository:
   }
 }
 ```
-
-An example context repo: [git@github.com:stolostron/server-foundation-dev-context.git](git@github.com:stolostron/server-foundation-dev-context.git)
 
 **Local Development:**
 
@@ -119,7 +82,37 @@ You can also use `inspector` to inspect the MCP resources:
 npx @modelcontextprotocol/inspector node build/index.js --context-repo git@github.com:stolostron/server-foundation-dev-context.git
 ```
 
-## Roadmap
+## Chat with your code-agent, here I use Cursor as an example
 
-- Add a hello workd context repo.
-- Add GUI context server.
+You can try this configuration in Cursor to see how it works.
+
+```
+{
+  "mcpServers": {
+    "egent": {
+      "command": "npx",
+      "args": ["-y", "egent@latest", "--context-repo", "git@github.com:xuezhaojun/egent-context.git"]
+    }
+  }
+}
+```
+
+First command must be `egent_start`, to let the code-agent know you want to call Egent MCP Server.
+
+```
+egent_start Say Hi to Egent.
+```
+
+Then your code-agent will start to add a new comment on this [issue](https://github.com/xuezhaojun/egent-context/issues/2).
+
+The interaction is like this:
+
+<img src="./docs/example_say_hi.png" width="800" alt="Cursor interaction">
+
+For a comprehensive overview of all tools supported by Egent, please refer to the [MCP documentation](docs/mcp.md).
+
+## Recommanded Practices
+
+Egent is designed to be used **across the team**, every task-template and knowledge update will enable everyone in the team to use it.
+
+It is also recommended to use Egent for **multiple projects**, you can start you code-agent from a directory containing multiple projects.
