@@ -51,10 +51,7 @@ const options = {
  * @throws Error if synchronization fails.
  */
 export async function syncContextRepo(repoUrl, repoRef) {
-  console.log(`[DEBUG] Starting git sync process for repo: ${repoUrl} at ref: ${repoRef}`);
-
   const CACHE_DIR = getCacheDir(repoUrl);
-  console.log(`[DEBUG] Using cache directory: ${CACHE_DIR}`);
 
   try {
     // Ensure the cache directory exists
@@ -100,7 +97,6 @@ export async function syncContextRepo(repoUrl, repoRef) {
       return cloneRepo(repoUrl, repoRef, CACHE_DIR);
     }
 
-    console.log(`[DEBUG] Git sync completed successfully`);
     return CACHE_DIR;
 
   } catch (error) {
