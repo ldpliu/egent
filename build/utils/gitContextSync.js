@@ -2,9 +2,36 @@ import path from 'path';
 import fs from 'fs-extra'; // Using fs-extra for ensureDirSync
 import os from 'os';
 import simpleGit from 'simple-git';
+import crypto from 'crypto';
 
-// Define the cache directory path within the user's home directory
-const CACHE_DIR = path.join(os.homedir(), '.egent', 'context_repo');
+/**
+ * Generate a unique directory name for a repository URL
+ * @param {string} repoUrl - The repository URL
+ * @returns {string} - A unique, safe directory name
+ */
+function generateRepoDirName(repoUrl) {
+  // Extract repo name from URL (e.g., "owner/repo" from "git@github.com:owner/repo.git")
+  const match = repoUrl.match(/[:/]([^/]+\/[^/]+?)(\.git)?$/);
+  if (!match) {
+    // Fallback to hash if can't extract repo name
+    return crypto.createHash('sha256').update(repoUrl).digest('hex').slice(0, 12);
+  }
+
+  const repoFullName = match[1].replace('/', '--');
+  // Add a hash of the full URL to handle same-named repos from different sources
+  const urlHash = crypto.createHash('sha256').update(repoUrl).digest('hex').slice(0, 8);
+  return `${repoFullName}-${urlHash}`;
+}
+
+/**
+ * Get the cache directory path for a specific repository
+ * @param {string} repoUrl - The repository URL
+ * @returns {string} - The absolute path to the cache directory
+ */
+function getCacheDir(repoUrl) {
+  const repoDirName = generateRepoDirName(repoUrl);
+  return path.join(os.homedir(), '.egent', 'repos', repoDirName);
+}
 
 const options = {
    baseDir: process.cwd(),
@@ -24,6 +51,11 @@ const options = {
  * @throws Error if synchronization fails.
  */
 export async function syncContextRepo(repoUrl, repoRef) {
+  console.log(`[DEBUG] Starting git sync process for repo: ${repoUrl} at ref: ${repoRef}`);
+
+  const CACHE_DIR = getCacheDir(repoUrl);
+  console.log(`[DEBUG] Using cache directory: ${CACHE_DIR}`);
+
   try {
     // Ensure the cache directory exists
     fs.ensureDirSync(path.dirname(CACHE_DIR)); // Ensure parent exists
@@ -41,7 +73,7 @@ export async function syncContextRepo(repoUrl, repoRef) {
       const isRepo = await git.checkIsRepo();
       if (!isRepo) {
         await fs.remove(CACHE_DIR);
-        return cloneRepo(repoUrl, repoRef);
+        return cloneRepo(repoUrl, repoRef, CACHE_DIR);
       }
 
       // Fetch updates from the remote
@@ -65,13 +97,14 @@ export async function syncContextRepo(repoUrl, repoRef) {
       }
 
     } else {
-      return cloneRepo(repoUrl, repoRef);
+      return cloneRepo(repoUrl, repoRef, CACHE_DIR);
     }
 
+    console.log(`[DEBUG] Git sync completed successfully`);
     return CACHE_DIR;
 
   } catch (error) {
-    console.error('Error synchronizing context repository:', error.message || error);
+    console.error(`[ERROR] Git sync failed:`, error.message || error);
     throw new Error(`Failed to synchronize context repository: ${error.message}`);
   }
 }
@@ -79,27 +112,19 @@ export async function syncContextRepo(repoUrl, repoRef) {
 /**
  * Clones the repository and checks out the ref if specified.
  */
-async function cloneRepo(repoUrl, repoRef) {
+async function cloneRepo(repoUrl, repoRef, cacheDir) {
    // Ensure the target directory does not exist before cloning
-   await fs.remove(CACHE_DIR); // Remove if partially created or is a non-git dir
+   await fs.remove(cacheDir); // Remove if partially created or is a non-git dir
 
-   // Adjust options for cloning (baseDir should be parent of CACHE_DIR)
-   const cloneOptions = { ...options, baseDir: path.dirname(CACHE_DIR) };
+   // Adjust options for cloning (baseDir should be parent of cacheDir)
+   const cloneOptions = { ...options, baseDir: path.dirname(cacheDir) };
    const git = simpleGit(cloneOptions);
 
    // Clone command
-   const cloneArgs = [repoUrl, CACHE_DIR];
-   // If a specific branch is provided, clone that branch directly for efficiency
-   // Note: Cloning tags directly is less straightforward, so we clone default and checkout later
-   // We can improve this later if cloning specific tags efficiently is needed
-   if (repoRef && (await isLikelyBranchName(repoRef))) { // Heuristic check if it looks like a branch
-      // cloneArgs.push('--branch', repoRef); // Disabled for simplicity, checkout after clone works reliably
-   }
-
-   await git.clone(repoUrl, CACHE_DIR); // Clone into the specific CACHE_DIR
+   await git.clone(repoUrl, cacheDir); // Clone into the specific cacheDir
 
    // Now that it's cloned, set the baseDir correctly for subsequent commands
-   options.baseDir = CACHE_DIR;
+   options.baseDir = cacheDir;
    const repoGit = simpleGit(options);
 
    // If a specific ref (branch, tag, commit) was specified, check it out
@@ -107,7 +132,7 @@ async function cloneRepo(repoUrl, repoRef) {
      await repoGit.checkout(repoRef);
    }
 
-   return CACHE_DIR;
+   return cacheDir;
 }
 
 /**

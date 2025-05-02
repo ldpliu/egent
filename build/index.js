@@ -75,7 +75,8 @@ async function initializeContext() {
         fs.statSync(path.join(contextBasePath, 'task-templates'));
     } catch (error) {
         if (error.code === 'ENOENT') {
-            // Log line removed
+            console.error(`Fatal: Context path does not exist: ${contextBasePath}`);
+            process.exit(1);
         }
     }
   }
