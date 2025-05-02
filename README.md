@@ -8,9 +8,9 @@ Egent is an MCP server that bridges **engineer teams** and **agents**.
 
 - [Design](#design)
 - [How to Use](#how-to-use)
-  - [Supported Agents](#supported-agents)
-  - [Configuration Examples](#configuration-examples)
-- [Roadmap](#roadmap)
+  - [Setup](#setup)
+  - [Chat with your code-agent, here I use Cursor as an example](#chat-with-your-code-agent-here-i-use-cursor-as-an-example)
+  - [Recommanded Practices](#recommanded-practices)
 
 ## Design
 
@@ -82,7 +82,7 @@ You can also use `inspector` to inspect the MCP resources:
 npx @modelcontextprotocol/inspector node build/index.js --context-repo git@github.com:stolostron/server-foundation-dev-context.git
 ```
 
-## Chat with your code-agent, here I use Cursor as an example
+### Chat with your code-agent, here I use Cursor as an example
 
 You can try this configuration in Cursor to see how it works.
 
@@ -111,7 +111,7 @@ The interaction is like this:
 
 For a comprehensive overview of all tools supported by Egent, please refer to the [MCP documentation](docs/mcp.md).
 
-## Recommanded Practices
+### Recommanded Practices
 
 Egent is designed to be used **across the team**, every task-template and knowledge update will enable everyone in the team to use it.
 
