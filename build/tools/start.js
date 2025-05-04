@@ -19,13 +19,13 @@ ${user_task}
 
 ## Getting Started
 
-1. First, use the \`egent_catalogs\` tool to view all available task templates.
+1. First, use the MCP tool \`egent_catalogs\` to view all available task templates.
 
 2. Compare the <user_task> with the available templates to identify the most relevant one.
 
 3. If multiple templates match, ask the user to choose one from the options you present.
 
-4. Once you have a template ID, use \`egent_execute\` with the ID to retrieve detailed step-by-step instructions and related knowledge dependencies.
+4. Once you have a template ID, use the MCP tool \`egent_execute\` with the ID to retrieve detailed step-by-step instructions and related knowledge dependencies.
 
 5. If the template requires parameters, extract them from the <user_task> or ask the user to provide the missing information.
 
