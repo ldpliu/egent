@@ -1,32 +1,58 @@
-# Egent
+<div align="center">
+  <img src="./docs/logo.png" width="300" alt="Egent Logo">
 
-Egent is an MCP server that bridges **engineer teams** and **agents**.
+  <p>A collaborative MCP server for sharing AI agent contexts between engineers</p>
 
-<img src="./docs/logo.png" width="300" alt="Egent Logo">
+  <!-- Add badges here -->
 
-## Table of Contents
+<a href="#"><img src="https://img.shields.io/badge/MCP-enabled-blue" alt="MCP enabled"></a>
+<a href="#"><img src="https://img.shields.io/badge/status-active-success" alt="Status"></a>
 
-- [Design](#design)
-- [How to Use](#how-to-use)
-  - [Setup](#setup)
-  - [Chat with your code-agent, here I use Cursor as an example](#chat-with-your-code-agent-here-i-use-cursor-as-an-example)
-  - [Recommanded Practices](#recommanded-practices)
+</div>
 
-## Design
+## 📋 Motivation & Overview
 
-<img src="./docs/design.png" width="800" alt="Design diagram">
+Modern programming tools like Cursor, Windsurf, Augment Code, and Cline all feature powerful "agent modes" that can automatically complete complex tasks based on natural language instructions:
 
-Egent connects your context-repo to an MCP server, and for each of your team members, whether they use an AI IDE like Cursor, open-source tools with local models such as Cline+Ollama, or code-agents running in remote environments, they can quickly access the contextual information needed to execute tasks by configuring the Egent MCP Server.
+- Building a full-stack feature with frontend, backend and database changes
+- Refactoring code across multiple files following consistent patterns
+- Setting up proper authentication flows with middleware and API endpoints
+- Implementing complex algorithms with proper error handling and testing
 
-Everyone in your team can continuously enrich and iterate the team's knowledge base by editing the context-repo (typically in the form of a GitHub repository), thereby enabling AI to automatically complete various tasks.
+However, these capabilities face a critical limitation: **context sharing**.
 
-For details on the structure and organization of a context repository, please refer to [docs/context.md](docs/context.md).
+### The Problem
 
-## How to Use
+- Each team member uses different tools (Cursor, Cline, etc.)
+- Natural language "task templates" exist only in individual environments
+- No centralized way to share, version, or collaboratively improve these contexts
+- Knowledge silos form as team members develop their own agent instructions
+
+### The Solution: Egent
+
+Egent converts GitHub repository-based contexts into an MCP Server that all mainstream programming tools support. This enables:
+
+- **Collaborative editing** of agent contexts through standard GitHub workflows
+- **Version control** for your team's AI prompts and task templates
+- **Immediate sharing** of new capabilities across the entire team
+
+For example, when engineer Alice adds a new task template for "Updating dependency versions across the monorepo," commits it to the context repo, and pushes, engineer Bob immediately gains access to this capability in his preferred coding tool.
+
+## 🔍 Design
+
+<div align="center">
+  <img src="./docs/design.png" width="800" alt="Design diagram">
+</div>
+
+Your team can continuously enrich the knowledge base by editing the context-repo (typically a GitHub repository), enabling AI to automatically complete various tasks.
+
+For context repository structure details, see [docs/context.md](docs/context.md).
+
+## 🚀 How to Use
 
 ### Setup
 
-**Basic Configuration:**
+#### Basic Configuration
 
 To use Egent with a remote context repository:
 
@@ -41,7 +67,7 @@ To use Egent with a remote context repository:
 }
 ```
 
-**Local Development:**
+#### Local Development
 
 For testing with a local context directory:
 
@@ -61,7 +87,7 @@ For testing with a local context directory:
 }
 ```
 
-**Egent Development:**
+#### Egent Development
 
 For developing Egent itself:
 
@@ -82,37 +108,49 @@ You can also use `inspector` to inspect the MCP resources:
 npx @modelcontextprotocol/inspector node build/index.js --context-repo git@github.com:stolostron/server-foundation-dev-context.git
 ```
 
-### Chat with your code-agent, here I use Cursor as an example
+### Chat with Your Code-Agent
 
-You can try this configuration in Cursor to see how it works.
+Below is an example configuration in Cursor:
 
-```
+```json
 {
   "mcpServers": {
     "egent": {
       "command": "npx",
-      "args": ["-y", "egent@latest", "--context-repo", "git@github.com:xuezhaojun/egent-context.git"]
+      "args": [
+        "-y",
+        "egent@latest",
+        "--context-repo",
+        "git@github.com:xuezhaojun/egent-context.git"
+      ]
     }
   }
 }
 ```
 
-First command must be `egent_start`, to let the code-agent know you want to call Egent MCP Server.
+The first command must be `egent_start` to initiate interaction:
 
 ```
 egent_start Say Hi to Egent.
 ```
 
-Then your code-agent will start to add a new comment on this [issue](https://github.com/xuezhaojun/egent-context/issues/2).
+Or more specific:
 
-The interaction is like this:
+```
+use MCP tool egent_start Say hi to Egent.
+```
 
-<img src="./docs/example_say_hi.png" width="800" alt="Cursor interaction">
+Your code-agent will then add a comment on this [issue](https://github.com:xuezhaojun/egent-context/issues/2).
 
-For a comprehensive overview of all tools supported by Egent, please refer to the [MCP documentation](docs/mcp.md).
+<div align="center">
+  <img src="./docs/example_say_hi.png" width="800" alt="Cursor interaction">
+</div>
 
-### Recommanded Practices
+For all tools supported by Egent, see the [MCP documentation](docs/mcp.md).
 
-Egent is designed to be used **across the team**, every task-template and knowledge update will enable everyone in the team to use it.
+## 💡 Recommended Practices
 
-It is also recommended to use Egent for **multiple projects**, you can start you code-agent from a directory containing multiple projects.
+- **Build a task library**: Create templates for common operations like setting up new components, implementing authentication flows, or generating test suites
+- **Share team knowledge**: Document project-specific patterns and practices as context for the agents
+- **Cross-tool compatibility**: Ensure all team members benefit regardless of their preferred coding tool
+- **Iterative improvement**: Continuously refine task templates based on team feedback

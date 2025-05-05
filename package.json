@@ -15,7 +15,7 @@
   },
   "type": "module",
   "name": "egent",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "main": "build/index.js",
   "bin": {
     "egent": "build/index.js"
