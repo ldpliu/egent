@@ -14,10 +14,10 @@
 
 Modern programming tools like Cursor, Windsurf, Augment Code, and Cline all feature powerful "agent modes" that can automatically complete complex tasks based on natural language instructions:
 
-- Building a full-stack feature with frontend, backend and database changes
-- Refactoring code across multiple files following consistent patterns
-- Setting up proper authentication flows with middleware and API endpoints
-- Implementing complex algorithms with proper error handling and testing
+- Updating package dependencies and addressing CVE vulnerabilities
+- Performing routine code refactoring across multiple files
+- Adding unit tests for new or existing functionality
+- Standardizing code formatting and fixing linting issues
 
 However, these capabilities face a critical limitation: **context sharing**.
 
