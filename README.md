@@ -105,7 +105,7 @@ For developing Egent itself:
 You can also use `inspector` to inspect the MCP resources:
 
 ```bash
-npx @modelcontextprotocol/inspector node build/index.js --context-repo git@github.com:stolostron/server-foundation-dev-context.git
+npx @modelcontextprotocol/inspector node build/index.js --context-repo git@github.com:xuezhaojun/egent-context.git
 ```
 
 ### Chat with Your Code-Agent
