@@ -54,15 +54,15 @@ export async function loadAllKnowledge(knowledgeRoot) {
 }
 
 /**
- * Load all task-template markdown files into a Map.
- * @param {string} taskTemplatesRoot
+ * Load all playbook markdown files into a Map.
+ * @param {string} playbooksRoot
  * @returns {Promise<Map<string, object>>}
  */
-export async function loadAllTaskTemplates(taskTemplatesRoot) {
-  const files = await findMarkdownFiles(taskTemplatesRoot);
+export async function loadAllPlaybooks(playbooksRoot) {
+  const files = await findMarkdownFiles(playbooksRoot);
   const map = new Map();
   for (const file of files) {
-    const key = getMarkdownKey(taskTemplatesRoot, file);
+    const key = getMarkdownKey(playbooksRoot, file);
     const { metadata, content } = await parseMarkdownFile(file);
 
     // Ensure id field exists in metadata
@@ -74,23 +74,23 @@ export async function loadAllTaskTemplates(taskTemplatesRoot) {
 }
 
 /**
- * Link dependencies between task templates and knowledge.
- * Adds `knowledgeDeps` to each task template (array of knowledge objects),
- * and `dependents` to each knowledge (array of task template objects).
+ * Link dependencies between playbooks and knowledge.
+ * Adds `knowledgeDeps` to each playbook (array of knowledge objects),
+ * and `dependents` to each knowledge (array of playbook objects).
  * @param {Map<string, object>} knowledgeMap
- * @param {Map<string, object>} taskTemplateMap
+ * @param {Map<string, object>} playbookMap
  */
-export function linkDependencies(knowledgeMap, taskTemplateMap) {
+export function linkDependencies(knowledgeMap, playbookMap) {
   // Initialize dependents array for each knowledge
   for (const knowledge of knowledgeMap.values()) {
     knowledge.dependents = [];
   }
 
-  for (const taskTemplate of taskTemplateMap.values()) {
-    const deps = Array.isArray(taskTemplate.metadata.dependencies)
-      ? taskTemplate.metadata.dependencies
+  for (const playbook of playbookMap.values()) {
+    const deps = Array.isArray(playbook.metadata.dependencies)
+      ? playbook.metadata.dependencies
       : [];
-    taskTemplate.knowledgeDeps = [];
+    playbook.knowledgeDeps = [];
     for (const dep of deps) {
       // Only handle knowledge dependencies like 'knowledge/tool/git.md' or 'knowledge/code/repo.md'
       const match = dep.match(/^knowledge\/(.+)\.md$/);
@@ -98,8 +98,8 @@ export function linkDependencies(knowledgeMap, taskTemplateMap) {
         const knowledgeKey = match[1]; // e.g., 'tool/git'
         const knowledge = knowledgeMap.get(knowledgeKey);
         if (knowledge) {
-          taskTemplate.knowledgeDeps.push(knowledge);
-          knowledge.dependents.push(taskTemplate);
+          playbook.knowledgeDeps.push(knowledge);
+          knowledge.dependents.push(playbook);
         }
       }
     }

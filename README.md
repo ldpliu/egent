@@ -1,7 +1,7 @@
 <div align="center">
-  <img src="./docs/logo.png" width="300" alt="Egent Logo">
+  <img src="./docs/logo.png" width="300" alt="PlaybookMCP Logo">
 
-  <p>A collaborative MCP server for sharing AI agent contexts between engineers</p>
+  <p>A collaborative MCP server for sharing playbooks between agents</p>
 
   <!-- Add badges here -->
 
@@ -24,19 +24,19 @@ However, these capabilities face a critical limitation: **context sharing**.
 ### The Problem
 
 - Each team member uses different tools (Cursor, Cline, etc.)
-- Natural language "task templates" exist only in individual environments
-- No centralized way to share, version, or collaboratively improve these contexts
-- Knowledge silos form as team members develop their own agent instructions
+- Natural language "playbooks" exist only in individual environments
+- No centralized way to share, version, or collaboratively improve these playbooks
+- Playbook silos form as team members develop their own agent instructions
 
-### The Solution: Egent
+### The Solution: playbookmcp
 
-Egent converts GitHub repository-based contexts into an MCP Server that all mainstream programming tools support. This enables:
+playbookmcp converts GitHub repository-based playbooks into an MCP Server that all mainstream programming tools support. This enables:
 
-- **Collaborative editing** of agent contexts through standard GitHub workflows
-- **Version control** for your team's AI prompts and task templates
+- **Collaborative editing** of playbooks through standard GitHub workflows
+- **Version control** for your team's playbooks
 - **Immediate sharing** of new capabilities across the entire team
 
-For example, when engineer Alice adds a new task template for "Updating dependency versions across the monorepo," commits it to the context repo, and pushes, engineer Bob immediately gains access to this capability in his preferred coding tool.
+For example, when engineer Alice adds a new playbook for "Updating dependency versions across the monorepo," commits it to the playbook repo, and pushes, engineer Bob immediately gains access to this capability in his preferred coding tool.
 
 ## 🔍 Design
 
@@ -44,9 +44,9 @@ For example, when engineer Alice adds a new task template for "Updating dependen
   <img src="./docs/design.png" width="800" alt="Design diagram">
 </div>
 
-Your team can continuously enrich the knowledge base by editing the context-repo (typically a GitHub repository), enabling AI to automatically complete various tasks.
+Your team can continuously enrich the knowledge base by editing the playbook-repo (typically a GitHub repository), enabling AI to automatically complete various tasks.
 
-For context repository structure details, see [docs/context.md](docs/context.md).
+For playbook repository structure details, see [docs/playbook.md](docs/playbook.md).
 
 ## 🚀 How to Use
 
@@ -54,14 +54,19 @@ For context repository structure details, see [docs/context.md](docs/context.md)
 
 #### Basic Configuration
 
-To use Egent with a remote context repository:
+To use playbookmcp with a remote playbook repository:
 
 ```json
 {
   "mcpServers": {
-    "egent": {
+    "playbookmcp": {
       "command": "npx",
-      "args": ["-y", "egent@latest", "--context-repo", "<your context repo>"]
+      "args": [
+        "-y",
+        "playbookmcp@latest",
+        "--playbook-repo",
+        "<your playbook repo>"
+      ]
     }
   }
 }
@@ -74,29 +79,33 @@ For testing with a local context directory:
 ```json
 {
   "mcpServers": {
-    "egent-local": {
+    "playbookmcp-local": {
       "command": "npx",
       "args": [
         "-y",
-        "egent@latest",
-        "--context-path",
-        "<your context files path>"
+        "playbookmcp@latest",
+        "--playbook-path",
+        "<your playbook files path>"
       ]
     }
   }
 }
 ```
 
-#### Egent Development
+#### PlaybookMCP Development
 
-For developing Egent itself:
+For developing PlaybookMCP itself:
 
 ```json
 {
   "mcpServers": {
-    "egent-dev": {
+    "playbookmcp-dev": {
       "command": "node",
-      "args": ["build/index.js", "--context-path", "<your context files path>"]
+      "args": [
+        "build/index.js",
+        "--playbook-path",
+        "<your playbook files path>"
+      ]
     }
   }
 }
@@ -105,7 +114,7 @@ For developing Egent itself:
 You can also use `inspector` to inspect the MCP resources:
 
 ```bash
-npx @modelcontextprotocol/inspector node build/index.js --context-repo git@github.com:xuezhaojun/egent-context.git
+npx @modelcontextprotocol/inspector node build/index.js --playbook-repo <your playbook repo>
 ```
 
 ### Chat with Your Code-Agent
@@ -115,38 +124,36 @@ Below is an example configuration in Cursor:
 ```json
 {
   "mcpServers": {
-    "egent": {
+    "playbookmcp": {
       "command": "npx",
       "args": [
         "-y",
-        "egent@latest",
-        "--context-repo",
-        "git@github.com:xuezhaojun/egent-context.git"
+        "playbookmcp@latest",
+        "--playbook-repo",
+        "git@github.com:xuezhaojun/PlaybookMCP-demo.git"
       ]
     }
   }
 }
 ```
 
-The first command must be `egent_start` to initiate interaction:
+The first command must be `playbookmcp_start` to initiate interaction:
 
 ```
-egent_start Say Hi to Egent.
+playbookmcp_start Say Hi to playbookmcp.
 ```
 
 Or more specific:
 
 ```
-use MCP tool egent_start Say hi to Egent.
+use MCP tool playbookmcp_start Say hi to playbookmcp.
 ```
 
-Your code-agent will then add a comment on this [issue](https://github.com:xuezhaojun/egent-context/issues/2).
+Your code-agent will then add a comment on this [issue](https://github.com:xuezhaojun/PlaybookMCP-demo/issues/2).
 
 <div align="center">
   <img src="./docs/example_say_hi.png" width="800" alt="Cursor interaction">
 </div>
-
-For all tools supported by Egent, see the [MCP documentation](docs/mcp.md).
 
 ## 💡 Recommended Practices
 

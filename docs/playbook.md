@@ -1,9 +1,9 @@
-### Context Repository Structure
+### Playbook Repository Structure
 
-Egent uses a structured context repository to organize knowledge and task templates. Here's a typical context repository structure:
+Egent uses a structured playbook repository to organize knowledge and playbooks. Here's a typical playbook repository structure:
 
 ```
-context-repo/
+playbook-repo/
 ├── knowledge/
 │   ├── tool/
 │   │   ├── git.md
@@ -11,7 +11,7 @@ context-repo/
 │   ├── code/
 │   │   └── repo.md
 │   └── team-member.md
-└── task-templates/
+└── playbooks/
     ├── release-related/
     │   ├── upgrade-go-version.md
     │   └── bump-up-go-pkg.md
@@ -24,9 +24,9 @@ This is just an example, you can organize your context repo as you like.
 
 ### Core Concepts
 
-#### 1. Knowledge Base
+#### 1. Knowledge
 
-Each knowledge file contains a description of the knowledge domain. A knowledge file will be referenced by the task templates.
+Each knowledge file contains a description of the knowledge domain. A knowledge file will be referenced by the playbooks.
 
 Example: `frontend-team-repositories.md`
 
@@ -43,13 +43,13 @@ description: All github repositories that own by our frontend team.
 
 ```
 
-#### 2. Task Templates
+#### 2. Playbook
 
-Task templates define repeatable workflows that agents can execute. Each template includes:
+Playbook define repeatable workflows that agents can execute. Each playbook includes:
 
-- `description` of the task's purpose
+- `description` of the playbook's purpose
 - `example` usage scenarios
-- `parameters` for task execution
+- `parameters` for playbook execution
 - `dependencies` list referencing required knowledge files
 
 Example: upgrade go version
@@ -73,4 +73,4 @@ dependencies:
 
 ## Examples
 
-- [server foundation dev context](https://github.com/stolostron/server-foundation-dev-context)
+- [server foundation agent playbook](https://github.com/stolostron/server-foundation-agent-playbook)

@@ -163,15 +163,3 @@ async function isBranch(git, ref) {
         return false; // Assume not a branch on error
     }
 }
-
-/**
- * Heuristic check if a ref name looks like a branch name (not foolproof).
- * Avoids trying to --branch clone a commit hash or tag.
- */
-async function isLikelyBranchName(ref) {
-    // Very basic check: does not contain typical tag/commit patterns like '/' or only hex chars
-    return !ref.includes('/') && !/^[0-9a-f]{7,}$/i.test(ref);
-}
-
-// Ensure fs-extra is installed: npm install fs-extra @types/fs-extra --save
-// Ensure simple-git is installed: npm install simple-git --save
