@@ -150,14 +150,3 @@ use MCP tool playbookmcp_start Say hi to playbookmcp.
 ```
 
 Your code-agent will then add a comment on this [issue](https://github.com:xuezhaojun/PlaybookMCP-demo/issues/2).
-
-<div align="center">
-  <img src="./docs/example_say_hi.png" width="800" alt="Cursor interaction">
-</div>
-
-## 💡 Recommended Practices
-
-- **Build a task library**: Create templates for common operations like setting up new components, implementing authentication flows, or generating test suites
-- **Share team knowledge**: Document project-specific patterns and practices as context for the agents
-- **Cross-tool compatibility**: Ensure all team members benefit regardless of their preferred coding tool
-- **Iterative improvement**: Continuously refine task templates based on team feedback
