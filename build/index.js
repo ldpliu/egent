@@ -107,9 +107,9 @@ async function main() {
     createExecuteTool(playbookMap)
   );
 
-  // Register the MCP Tool: playbookmcp_start
+  // Register the MCP Tool: pb_start
   server.tool(
-    "playbookmcp_start",
+    "pb_start",
     { user_task: z.string() },
     createStartTool()
   );

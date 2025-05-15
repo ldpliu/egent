@@ -137,16 +137,16 @@ Below is an example configuration in Cursor:
 }
 ```
 
-The first command must be `playbookmcp_start` to initiate interaction:
+The first command must be `pb_start` to initiate interaction:
 
 ```
-playbookmcp_start Say Hi to playbookmcp.
+pb_start Say Hi to playbookmcp.
 ```
 
 Or more specific:
 
 ```
-use MCP tool playbookmcp_start Say hi to playbookmcp.
+use MCP tool pb_start Say hi to playbookmcp.
 ```
 
 Your code-agent will then add a comment on this [issue](https://github.com:xuezhaojun/PlaybookMCP-demo/issues/2).
