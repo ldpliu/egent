@@ -19,13 +19,13 @@ ${user_task}
 
 ## Getting Started
 
-1. First, use the MCP tool \`playbookmcp_catalogs\` to view all available playbooks.
+1. First, use the MCP tool \`pb_catalogs\` to view all available playbooks.
 
 2. Compare the <user_task> with the available playbooks to identify the most relevant one.
 
 3. If multiple playbooks match, ask the user to choose one from the options you present.
 
-4. Once you have a playbook ID, use the MCP tool \`playbookmcp_execute\` with the ID to retrieve detailed step-by-step instructions and related knowledge dependencies.
+4. Once you have a playbook ID, use the MCP tool \`pb_execute\` with the ID to retrieve detailed step-by-step instructions and related knowledge dependencies.
 
 5. If the playbook requires parameters, extract them from the <user_task> or ask the user to provide the missing information.
 

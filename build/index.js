@@ -93,16 +93,16 @@ async function main() {
     version: "0.1.0"
   });
 
-  // Register the MCP Tool: playbookmcp_catalogs
+  // Register the MCP Tool: pb_catalogs
   server.tool(
-    "playbookmcp_catalogs",
+    "pb_catalogs",
     {},  // No parameters needed
     createCatalogTool(playbookMap)
   );
 
-  // Register the MCP Tool: playbookmcp_execute
+  // Register the MCP Tool: pb_execute
   server.tool(
-    "playbookmcp_execute",
+    "pb_execute",
     { id: z.string() },
     createExecuteTool(playbookMap)
   );
