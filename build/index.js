@@ -81,30 +81,37 @@ async function initializeContext() {
   }
   // Load all knowledge and playbooks into memory
   knowledgeMap = await loadAllKnowledge(path.join(playbookBasePath, 'knowledge'));
+  console.log("echo knowledgeMap")
+  console.log(knowledgeMap);
   playbookMap = await loadAllPlaybooks(path.join(playbookBasePath, 'playbooks'));
-  linkDependencies(knowledgeMap, playbookMap);
+  console.log("echo playbookmap")
+  console.log(playbookMap);
+  //linkDependencies(knowledgeMap, playbookMap);
 }
 
 async function main() {
   await initializeContext();
-
+  console.log("echo knowledgeMap")
+  console.log(knowledgeMap);
+  console.log("echo playbookMap")
+  console.log(playbookMap);
   const server = new McpServer({
     name: "playbookmcp",
     version: "0.1.0"
   });
 
-  // Register the MCP Tool: pb_catalogs
+  // Register the MCP Tool: pb_knowledge
   server.tool(
-    "pb_catalogs",
+    "pb_knowledge",
     {},  // No parameters needed
-    createCatalogTool(playbookMap)
+    createCatalogTool(knowledgeMap)
   );
 
-  // Register the MCP Tool: pb_execute
+  // Register the MCP Tool: pb_prerequest
   server.tool(
-    "pb_execute",
-    { id: z.string() },
-    createExecuteTool(playbookMap)
+    "pb_prerequest",
+    {},  // No parameters needed
+    createCatalogTool(playbookMap)
   );
 
   // Register the MCP Tool: pb_start
@@ -113,7 +120,6 @@ async function main() {
     { user_task: z.string() },
     createStartTool()
   );
-
   const transport = new StdioServerTransport();
   await server.connect(transport);
 }

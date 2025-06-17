@@ -12,7 +12,7 @@ export default function createCatalogTool(playbookMap) {
     // Extract playbook info
     const playbooks = Array.from(playbookMap.values()).map(item => {
       const id = item.metadata.id || item.key;
-      const description = item.metadata.description || "";
+      const description = item.content || "";
       return { id, description };
     });
 
@@ -23,14 +23,10 @@ export default function createCatalogTool(playbookMap) {
     const catalogText = playbooks.length === 0
       ? "No playbooks available."
       : `Found ${playbooks.length} playbooks:\n\n` +
-        playbooks.map(p => `* **playbookID: ${p.id}** - playbookDesc: ${p.description}`).join('\n');
+        playbooks.map(p => `* **playbookID: ${p.id}** \n - description: ${p.description}`).join('\n');
 
     // Include formatting suggestion for the agent
-    const response = catalogText + `\n\nSuggestion for agent: Consider formatting this catalog as bullet points for better readability:
-
-${playbooks.map(p => `* **playbookID: ${p.id}** - playbookDesc: ${p.description}`).join('\n')}
-
-This makes the catalog easier to scan and understand.`;
+    const response = catalogText;
 
     return {
       content: [{
